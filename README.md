@@ -1,0 +1,4 @@
+KinectProject
+=============
+
+Kinect Stitching
