@@ -1,0 +1,50 @@
+Program Flow:
+
+
+
+Every frame:
+
+	1. quick pass through image, determine rectangle bounds list. Minimum ~64 x 48.
+			- 640 x 480 image = 307200 calculations
+			- 320 x 240 image = 76800  calculations
+			- 160 x 120 image = 19200  calculations
+			- 80  x 60  image = 4800   calculations
+	2. detailed pass through each rectangle of interest 	 (ROI).
+			a. max resolution of each image = 100x100. If bigger, scale by multiples of two.
+			b. during pass, determine hand/finger position/orientations.
+	3. mathematics/gesture handling.
+			a. use hands 
+
+
+Decided:
+
+	1. Square the distance inputs, so that farther away objects are seen with more granularity than nearer objects.
+To Do:
+
+	1. Delta-Map of Image.
+	2. 
+
+
+I. Look for hand
+		a. Search depth image for an open hand.
+		b. Save original 'baseline' image--the background on which the hand is.
+		c. For every subsequent frame, subtract the kinect's image from this baseline image.
+		d. Only depth values greater than a particular threshold will be the hand. The rest is environmental noise.
+				- If B = depth baseline value and D = current depth value, in feet.
+				- If B<D-0.2, then depth = B; else, depth = 0.
+				- If B>D+0.2, then B is now set equal to D. The baseline depth value is moved backwards.
+						. Using this method, any objects removed from the scene will be accounted for.
+				- Note: this method is still susceptible to other, moving noise; eg. a new person entering the scene.
+II. Every frame, process hand:
+		a. Quick pass through image, through 64 x 48 version of image.
+				i. Calculate hand bounds; the closest rectangle to the sensor.
+		b. Calculate gradient of the arm. The arm is the MOST GRADUAL gradient; the lowest derivative.
+		c. Arm length is the length of the gradient (up to the next jagged edge). Arm direction is angle of the gradient.
+				- Cursor's vector: magnitude is the length of the gradient, direction is the angle of the gradient.
+
+
+Every frame:
+	
+	1. quick pass through image; save data to 64 x 48 image.
+			a. determine nearest depth value; this, and all areas of similar intensity, is the user's hand.
+			b. determine gradient of the arm; the arm is the MOST GRADUAL gradient; the lowest derivative.
